@@ -1,4 +1,5 @@
 #include "gemm_cuda.h"
+#include "kernels_cuda.cuh"
 
 
 void gemm_cuda (int trans_a, int trans_b,
@@ -9,15 +10,18 @@ void gemm_cuda (int trans_a, int trans_b,
                 float beta,
                 float * device_c, int ldc)
 {
-  int i, j;
-  for (i = 0; i < m; ++i)
-  {
-    for (j = 0; j < n; ++j)
-    {
-      device_c[i*ldc+j] *= beta;
-    }
-  }
+  // int i, j;
+  // for (i = 0; i < m; ++i)
+  // {
+  //   for (j = 0; j < n; ++j)
+  //   {
+  //     device_c[i*ldc+j] *= beta;
+  //   }
+  // }
+  unsigned int count = (m*n+512-1)/512;
+  VectorMulKernel<<<count, 512>>>(m, n, alpha, device_a, lda);
 
+/*
   if (!trans_a && !trans_b)
     gemm_nn_cuda (m, n, k, alpha, device_a, lda, device_b, ldb, device_c, ldc);
   else if (trans_a && !trans_b)
@@ -26,7 +30,7 @@ void gemm_cuda (int trans_a, int trans_b,
     gemm_nt_cuda (m, n, k, alpha, device_a, lda, device_b, ldb, device_c, ldc);
   else
     gemm_tt_cuda (m, n, k, alpha, device_a, lda, device_b, ldb, device_c, ldc);
-
+*/
 }
 
 

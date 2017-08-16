@@ -1,5 +1,10 @@
 # GEMM
 # ----------------------------------------------------------------------------
+# configurations
+
+MODE = gpu
+
+# ----------------------------------------------------------------------------
 # directories
 
 # project dirs
@@ -27,10 +32,17 @@ include makefiles/tests.make
 # ----------------------------------------------------------------------------
 # compiler
 
-CC = gcc
+ifeq ($(MODE), cpu)
+  CC = gcc
+else ifeq ($(MODE), gpu)
+  CC = nvcc
+endif
 
-CC_CFLAGS = -I$(INC_DIR) 
-CC_LDFLAGS = 
+CUDA_INC_DIR = /usr/loca/cuda/include
+CUDA_LIB_DIR = /usr/local/cuda/lib64
+
+CC_CFLAGS = -I$(INC_DIR) -I$(CUDA_INC_DIR)
+CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lcudart 
 
 # ----------------------------------------------------------------------------
 # console
@@ -68,5 +80,6 @@ run: run_tests
 clean:
 	rm -rf $(BUILD_DIR)
 
-dummy: help
+dummy: 
+	@echo $(SRC_OBJECTS)
 	

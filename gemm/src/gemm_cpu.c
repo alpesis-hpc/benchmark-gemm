@@ -19,7 +19,7 @@ void gemm_cpu (int trans_a, int trans_b,
     }
   }
 
-  if(!trans_a && !trans_b)
+  if (!trans_a && !trans_b)
     gemm_nn (m, n, k, alpha, host_a, lda, host_b, ldb, host_c, ldc);
   else if (trans_a && !trans_b)
     gemm_tn (m, n, k, alpha, host_a, lda, host_b, ldb, host_c, ldc);

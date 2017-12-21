@@ -1,1 +1,1 @@
-#define DTYPE int
+#define DTYPE long
